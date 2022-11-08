@@ -1,7 +1,7 @@
 import s from './Settings.module.css'
 import {Button, TextField} from "@material-ui/core";
 import React, {ChangeEvent, useEffect, useState} from "react";
-import {SettingsType} from "../../BLL/types";
+import {CounterType, SettingsType} from "../../BLL/types";
 
 type SettingsPropsType = {
     START_VALUE: number
