@@ -1,9 +1,9 @@
 .counterContainer{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
-    margin: 10px auto;
+    margin: 0px auto;
 }
 .buttonGroup{
     display: flex;
@@ -13,8 +13,12 @@
     height: 50px;
     box-shadow: 1px 1px 5px #3f51b5;
     border-radius: 5px;
-    margin: 10px;
+    margin-top: 10px;
 }
 .buttonGroup button{
     margin: 10px;
+}
+.displayAndButtons{
+    display: flex;
+    flex-direction: column;
 }

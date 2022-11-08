@@ -7,3 +7,8 @@ export type CounterType = {
 export type StateType = {
     counter: CounterType
 }
+export type SettingsType = {
+    START_VALUE: number
+    MAX_VALUE: number
+    STEP: number
+}

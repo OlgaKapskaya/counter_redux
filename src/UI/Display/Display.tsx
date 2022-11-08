@@ -4,13 +4,15 @@ import s from './Display.module.css'
 type DisplayPropsType = {
     CURRENT_VALUE: number
     MAX_VALUE: number
+    error: string
 }
 export const Display: React.FC<DisplayPropsType> = (props) => {
-    const {CURRENT_VALUE, MAX_VALUE} = props
+    const {CURRENT_VALUE, MAX_VALUE, error} = props
     const titleStyle = CURRENT_VALUE === MAX_VALUE ? s.titleEnd : s.title
     return (
         <div className={s.displayContainer}>
-            <h1 className={titleStyle}>{CURRENT_VALUE}</h1>
+            {error === "" && <h1 className={titleStyle}>{CURRENT_VALUE}</h1>}
+            {error !== "" && <h1 className={s.titleEnd}>{error}</h1>}
         </div>
     )
 }
