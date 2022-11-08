@@ -12,7 +12,7 @@ export const Display: React.FC<DisplayPropsType> = (props) => {
     return (
         <div className={s.displayContainer}>
             {error === "" && <h1 className={titleStyle}>{CURRENT_VALUE}</h1>}
-            {error !== "" && <h1 className={s.titleEnd}>{error}</h1>}
+            {error !== "" && <h2 className={s.titleEnd}>{error}</h2>}
         </div>
     )
 }

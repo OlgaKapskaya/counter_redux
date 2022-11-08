@@ -1,7 +1,8 @@
 import {connect} from "react-redux";
 import {Counter} from "./Counter";
 import {dispatchType, stateType} from "../BLL/reduxStore";
-import {AddCountAC, ResetCountAC} from "../BLL/counterReducer";
+import {AddCountAC, ResetCountAC, SetSettingsAC} from "../BLL/counterReducer";
+import {SettingsType} from "../BLL/types";
 
 let mapStateToProps = (state: stateType) => {
     return {
@@ -15,7 +16,8 @@ let mapStateToProps = (state: stateType) => {
 let mapDispatchToProps = (dispatch: dispatchType) => {
     return {
         addCount: () => dispatch(AddCountAC()),
-        resetCount: () => dispatch(ResetCountAC())
+        resetCount: () => dispatch(ResetCountAC()),
+        setSettings: (settings: SettingsType) => dispatch(SetSettingsAC(settings))
     }
 }
 export const CounterContainer = connect(mapStateToProps, mapDispatchToProps)(Counter)

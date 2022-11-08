@@ -3,6 +3,7 @@ import s from './Counter.module.css'
 import {Display} from "./Display/Display";
 import {Button} from "@material-ui/core";
 import {Settings} from "./Settings/Settings";
+import {SettingsType} from "../BLL/types";
 
 type CounterPropsType = {
     START_VALUE: number
@@ -11,10 +12,11 @@ type CounterPropsType = {
     STEP: number
     addCount: () => void
     resetCount: () => void
+    setSettings: (settings: SettingsType) => void
 }
 
 export const Counter: React.FC<CounterPropsType> = (props) => {
-    let {START_VALUE, MAX_VALUE, STEP, CURRENT_VALUE, addCount, resetCount} = props
+    let {START_VALUE, MAX_VALUE, STEP, CURRENT_VALUE, addCount, resetCount, setSettings} = props
     const [error, setError] = useState<string>('')
     return (
         <div className={s.counterContainer}>
@@ -36,7 +38,12 @@ export const Counter: React.FC<CounterPropsType> = (props) => {
                 </div>
             </div>
             <div className={s.settings}>
-            <Settings START_VALUE={START_VALUE} MAX_VALUE={MAX_VALUE} STEP={STEP} error={error} setError={setError}/>
+            <Settings START_VALUE={START_VALUE}
+                      MAX_VALUE={MAX_VALUE}
+                      STEP={STEP}
+                      error={error}
+                      setError={setError}
+                      setSettings={setSettings}/>
             </div>
         </div>
     )
