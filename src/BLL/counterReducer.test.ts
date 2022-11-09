@@ -1,36 +1,28 @@
 import {AddCountAC, counterReducer, ResetCountAC, SetSettingsAC} from "./counterReducer";
+import {CounterType} from "./types";
 
-test('add count function (the current value should increase by the step)', () => {
-    const startState = {
+let startState: CounterType
+beforeEach(() => {
+    startState = {
         START_VALUE: 0,
         MAX_VALUE: 5,
         CURRENT_VALUE: 0,
         STEP: 1
     }
+})
+test('add count function (the current value should increase by the step)', () => {
     const newState = counterReducer(startState, AddCountAC())
 
     expect(newState).not.toBe(startState)
     expect(newState.CURRENT_VALUE).toBe(1)
 })
 test('reset count function (the current value must be equal to the start value)', () => {
-    const startState = {
-        START_VALUE: 0,
-        MAX_VALUE: 5,
-        CURRENT_VALUE: 3,
-        STEP: 1
-    }
     const newState = counterReducer(startState, ResetCountAC())
 
     expect(newState).not.toBe(startState)
     expect(newState.CURRENT_VALUE).toBe(0)
 })
 test('set settings function', () => {
-    const startState = {
-        START_VALUE: 0,
-        MAX_VALUE: 5,
-        CURRENT_VALUE: 0,
-        STEP: 1
-    }
     const setting = {
         START_VALUE: 1,
         MAX_VALUE: 10,

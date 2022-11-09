@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import s from './Counter.module.css'
 import {Display} from "./Display/Display";
 import {Button} from "@material-ui/core";
-import {Settings} from "./Settings/Settings";
+import {SettingsContainer} from "./Settings/Settings";
 import {SettingsType} from "../BLL/types";
 
 type CounterPropsType = {
@@ -38,12 +38,12 @@ export const Counter: React.FC<CounterPropsType> = (props) => {
                 </div>
             </div>
             <div className={s.settings}>
-            <Settings START_VALUE={START_VALUE}
-                      MAX_VALUE={MAX_VALUE}
-                      STEP={STEP}
-                      error={error}
-                      setError={setError}
-                      setSettings={setSettings}/>
+                <SettingsContainer START_VALUE={START_VALUE}
+                                   MAX_VALUE={MAX_VALUE}
+                                   STEP={STEP}
+                                   error={error}
+                                   setError={setError}
+                                   setSettings={setSettings}/>
             </div>
         </div>
     )

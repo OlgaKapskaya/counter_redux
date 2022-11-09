@@ -1,7 +1,7 @@
 import s from './Settings.module.css'
 import {Button, TextField} from "@material-ui/core";
 import React, {ChangeEvent, useEffect, useState} from "react";
-import {CounterType, SettingsType} from "../../BLL/types";
+import {SettingsType} from "../../BLL/types";
 
 type SettingsPropsType = {
     START_VALUE: number
@@ -11,8 +11,9 @@ type SettingsPropsType = {
     setError: (text: string) => void
     setSettings: (settings: SettingsType) => void
 }
-export const Settings: React.FC<SettingsPropsType> = (props) => {
+const Settings: React.FC<SettingsPropsType> = (props) => {
     const {START_VALUE, MAX_VALUE, STEP, error, setError, setSettings} = props
+
     const [settings, setNewSettings] = useState<SettingsType>({
         START_VALUE: START_VALUE,
         MAX_VALUE: MAX_VALUE,
@@ -100,3 +101,4 @@ export const Settings: React.FC<SettingsPropsType> = (props) => {
         </div>
     )
 }
+export const SettingsContainer = React.memo(Settings)
