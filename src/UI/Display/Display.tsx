@@ -1,4 +1,4 @@
-import React from "react";
+import React, {memo} from "react";
 import s from './Display.module.css'
 
 type DisplayPropsType = {
@@ -8,7 +8,7 @@ type DisplayPropsType = {
     error: boolean
 }
 
-const Display: React.FC<DisplayPropsType> = (props) => {
+export const Display: React.FC<DisplayPropsType> = memo((props) => {
     const {CURRENT_VALUE, MAX_VALUE, error, settingsTitle} = props
 
 
@@ -23,5 +23,4 @@ const Display: React.FC<DisplayPropsType> = (props) => {
             {error && <h2 className={s.titleEnd}>Incorrect value!</h2>}
         </div>
     )
-}
-export const DisplayContainer = React.memo(Display)
+})

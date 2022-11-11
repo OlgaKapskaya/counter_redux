@@ -1,45 +1,65 @@
 import s from './Settings.module.css'
 import {Button, TextField} from "@material-ui/core";
-import React, {ChangeEvent} from "react";
-import {CounterType, settingsTitleType} from "../../BLL/types";
+import React, {ChangeEvent, memo, useEffect, useState} from "react";
+import {settingsTitleType, SettingsType} from "../../BLL/types";
 
 type SettingsPropsType = {
-    counter: CounterType
+    counter: SettingsType
+    error: boolean
     setError: () => void
+    resetError: () => void
     setSettingsTitle: (title: settingsTitleType) => void
-    setSettings: (settings: CounterType) => void
+    setSettings: (settings: SettingsType) => void
 }
-const Settings: React.FC<SettingsPropsType> = (props) => {
-    const {counter, setSettings, setError, setSettingsTitle} = props
+export const Settings: React.FC<SettingsPropsType> = memo((props) => {
+    const {counter, setSettings, error, setError, resetError, setSettingsTitle} = props
 
-    const onChangeFunctionCreator = (newSettings: CounterType) => {
-            setSettings(newSettings)
-            setSettingsTitle('set settings and click SAVE button')
+    const [newSettings, setNewSettings] = useState<SettingsType>({
+        START_VALUE: counter.START_VALUE,
+        MAX_VALUE: counter.MAX_VALUE,
+        STEP: counter.STEP
+    })
+    useEffect(() => {
+        if (newSettings.START_VALUE >= newSettings.MAX_VALUE
+            || newSettings.MAX_VALUE > 100
+            || newSettings.START_VALUE < 0
+            || newSettings.STEP < 1
+            || newSettings.STEP > (newSettings.MAX_VALUE - newSettings.START_VALUE)
+            || (newSettings.MAX_VALUE - newSettings.START_VALUE) % newSettings.STEP !== 0
+        ) {
             setError()
+        } else {
+            resetError()
+        }
+    }, [newSettings])
+
+    const onChangeFunctionCreator = (newSettings: SettingsType) => {
+        setNewSettings(newSettings)
+        setSettingsTitle('set settings and click SAVE button')
+        setError()
     }
     const onChangeStartHandler = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        onChangeFunctionCreator({...counter, START_VALUE: +event.currentTarget.value})
+        onChangeFunctionCreator({...newSettings, START_VALUE: +event.currentTarget.value})
     }
     const onChangeMaxHandler = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        onChangeFunctionCreator({...counter, MAX_VALUE: +event.currentTarget.value})
+        onChangeFunctionCreator({...newSettings, MAX_VALUE: +event.currentTarget.value})
     }
     const onChangeStepHandler = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        onChangeFunctionCreator({...counter, STEP: +event.currentTarget.value})
+        onChangeFunctionCreator({...newSettings, STEP: +event.currentTarget.value})
     }
     const onClickSaveHandler = () => {
+        setSettings(newSettings)
         setSettingsTitle('')
     }
-    const onClickDefaultHandler = () => {
-        let defaultSettings: CounterType = {
-            START_VALUE: 0,
-            MAX_VALUE: 5,
-            STEP: 1,
-            CURRENT_VALUE: 0,
-            error: false
+    const onClickCancelHandler = () => {
+        let cancelSettings: SettingsType = {
+            START_VALUE: counter.START_VALUE,
+            MAX_VALUE: counter.MAX_VALUE,
+            STEP: counter.STEP
         }
-        setSettings(defaultSettings)
-        setError()
+        setNewSettings(cancelSettings)
         setSettingsTitle('')
+        resetError()
     }
 
     return (
@@ -49,27 +69,29 @@ const Settings: React.FC<SettingsPropsType> = (props) => {
                            type={'number'}
                            size={'small'}
                            label={'Enter START value'}
-                           value={counter.START_VALUE}
+                           value={newSettings.START_VALUE}
                            onChange={onChangeStartHandler}
-                           error={counter.START_VALUE >= counter.MAX_VALUE}/>
+                           error={newSettings.START_VALUE >= newSettings.MAX_VALUE || newSettings.START_VALUE < 0}/>
                 <TextField variant={'standard'}
                            type={'number'}
                            size={'small'}
                            label={'Enter MAX value'}
-                           value={props.counter.MAX_VALUE}
+                           value={newSettings.MAX_VALUE}
                            onChange={onChangeMaxHandler}
-                           error={counter.MAX_VALUE <= counter.START_VALUE}/>
+                           error={newSettings.MAX_VALUE <= newSettings.START_VALUE || newSettings.MAX_VALUE > 100}/>
                 <TextField variant={'standard'}
                            type={'number'}
                            size={'small'}
                            label={'Enter STEP value'}
-                           value={counter.STEP}
+                           value={newSettings.STEP}
                            onChange={onChangeStepHandler}
-                           error={(counter.STEP < 1) || (counter.MAX_VALUE - counter.START_VALUE) % counter.STEP !== 0}/>
+                           error={(newSettings.STEP < 1)
+                               || (newSettings.MAX_VALUE - newSettings.START_VALUE)
+                               % newSettings.STEP !== 0}/>
             </div>
             <div className={s.buttonContainer}>
                 <Button variant={"contained"}
-                        disabled={counter.error}
+                        disabled={error}
                         size={'small'}
                         color={'primary'}
                         onClick={onClickSaveHandler}>
@@ -78,12 +100,11 @@ const Settings: React.FC<SettingsPropsType> = (props) => {
                 <Button variant={"contained"}
                         size={'small'}
                         color={'primary'}
-                        onClick={onClickDefaultHandler}>
-                    SET DEFAULT
+                        onClick={onClickCancelHandler}>
+                    CANCEL
                 </Button>
             </div>
 
         </div>
     )
-}
-export const SettingsContainer = React.memo(Settings)
+})
