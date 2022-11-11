@@ -1,29 +1,29 @@
 import {connect} from "react-redux";
 import {Counter} from "./Counter";
-import {dispatchType, stateType} from "../BLL/reduxStore";
-import {AddCountAC, ResetCountAC, SetSettingsAC} from "../BLL/counterReducer";
-import {CounterType, SettingsType} from "../BLL/types";
+import {stateType} from "../BLL/reduxStore";
+import {AddCountAC, ResetCountAC, SetErrorAC, SetSettingsAC} from "../BLL/counterReducer";
+import {CounterType} from "../BLL/types";
+import {Dispatch} from "redux";
 
 
 type mapDispatchToPropsType = {
     addCount: () => void
     resetCount: () => void
-    setSettings: (settings: SettingsType) => void
+    setSettings: (settings: CounterType) => void
+    setError: () => void
 }
-const mapStateToProps = (state: stateType): CounterType => {
+const mapStateToProps = (state: stateType): stateType => {
     return {
-        START_VALUE: state.counter.START_VALUE,
-        MAX_VALUE: state.counter.MAX_VALUE,
-        CURRENT_VALUE: state.counter.CURRENT_VALUE,
-        STEP: state.counter.STEP
+        counter: state.counter
     }
 }
 
-const mapDispatchToProps = (dispatch: dispatchType): mapDispatchToPropsType=> {
+const mapDispatchToProps = (dispatch: Dispatch): mapDispatchToPropsType=> {
     return {
         addCount: () => dispatch(AddCountAC()),
         resetCount: () => dispatch(ResetCountAC()),
-        setSettings: (settings: SettingsType) => dispatch(SetSettingsAC(settings))
+        setSettings: (settings: CounterType) => dispatch(SetSettingsAC(settings)),
+        setError: () => dispatch(SetErrorAC())
     }
 }
 export const CounterContainer = connect(mapStateToProps, mapDispatchToProps)(Counter)

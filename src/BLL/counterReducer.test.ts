@@ -1,4 +1,4 @@
-import {AddCountAC, counterReducer, ResetCountAC, SetSettingsAC} from "./counterReducer";
+import {AddCountAC, counterReducer, ResetCountAC, SetErrorAC, SetSettingsAC} from "./counterReducer";
 import {CounterType} from "./types";
 
 let startState: CounterType
@@ -7,7 +7,8 @@ beforeEach(() => {
         START_VALUE: 0,
         MAX_VALUE: 5,
         CURRENT_VALUE: 0,
-        STEP: 1
+        STEP: 1,
+        error: false
     }
 })
 test('add count function (the current value should increase by the step)', () => {
@@ -26,7 +27,9 @@ test('set settings function', () => {
     const setting = {
         START_VALUE: 1,
         MAX_VALUE: 10,
-        STEP: 2
+        CURRENT_VALUE: 1,
+        STEP: 2,
+        error: false
     }
     const newState = counterReducer(startState, SetSettingsAC(setting))
 

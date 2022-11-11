@@ -15,7 +15,4 @@ store.subscribe(() => {
     });
 });
 
-
 export type stateType = ReturnType<typeof reducers> // типизация того,что наш стор вернет
-export type storeType = typeof store // типизация самого стора
-export type dispatchType = typeof store.dispatch
