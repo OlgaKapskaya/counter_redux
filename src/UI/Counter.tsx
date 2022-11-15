@@ -4,14 +4,14 @@ import {Display} from "./Display/Display";
 import {Button} from "@material-ui/core";
 import {Settings} from "./Settings/Settings";
 import {CounterType, SettingsTitleType, SettingsType} from "../BLL/types";
-import {useDispatch, useSelector} from "react-redux";
-import {StateType} from "../BLL/reduxStore";
-import {AddCountAC, ResetCountAC} from "../BLL/counterReducer";
+import {useDispatch} from "react-redux";
+import {typedUseSelector} from "../BLL/reduxStore";
+import {addCountAC, resetCountAC} from "../BLL/counterReducer";
 
 export const Counter = () => {
     const [settingsTitle, setSettingsTitle] = useState<SettingsTitleType>('')
 
-    const counter = useSelector<StateType, CounterType>(state => state.counter)
+    const counter = typedUseSelector<CounterType>(state => state.counter)
     const dispatch = useDispatch()
 
     const settings: SettingsType = {
@@ -19,15 +19,14 @@ export const Counter = () => {
         MAX_VALUE: counter.MAX_VALUE,
         STEP: counter.STEP
     }
-    const addCountHandler = () => {
+
+    const addCountHandler = (): void => {
         if (counter.CURRENT_VALUE < counter.MAX_VALUE) {
-            dispatch(AddCountAC())
+            dispatch(addCountAC()) // экшн криейторы с маленькой буквы
         }
     }
-    const resetCountHandler = () => {
-        dispatch(ResetCountAC())
-    }
 
+    const resetCountHandler = () => dispatch(resetCountAC())
 
     return (
         <div className={s.counterContainer}>
@@ -37,16 +36,16 @@ export const Counter = () => {
                          settingsTitle={settingsTitle}
                          error={counter.error}/>
                 <div className={s.buttonGroup}>
-                    <Button variant={"contained"}
-                            size={'small'}
-                            color={'primary'}
+                    <Button variant="contained"
+                            size='small'
+                            color='primary'
                             disabled={counter.error || settingsTitle !== ""}
                             onClick={addCountHandler}>
                         ADD
                     </Button>
-                    <Button variant={"contained"}
-                            size={'small'}
-                            color={'primary'}
+                    <Button variant="contained"
+                            size='small'
+                            color='primary'
                             disabled={counter.error || settingsTitle !== ""}
                             onClick={resetCountHandler}>
                         RESET

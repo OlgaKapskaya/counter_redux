@@ -4,7 +4,7 @@ import React, {ChangeEvent, memo, useEffect, useState} from "react";
 import {SettingsTitleType, SettingsType} from "../../BLL/types";
 import {useDispatch, useSelector} from "react-redux";
 import {StateType} from "../../BLL/reduxStore";
-import {ResetErrorAC, SetErrorAC, SetSettingsAC} from "../../BLL/counterReducer";
+import {resetErrorAC, setErrorAC, setSettingsAC} from "../../BLL/counterReducer";
 
 type SettingsPropsType = {
     counterSettings: SettingsType
@@ -17,17 +17,21 @@ export const Settings: React.FC<SettingsPropsType> = memo((props) => {
     const dispatch = useDispatch()
 
     const [newSettings, setNewSettings] = useState<SettingsType>(counterSettings)
-    useEffect(() => {
-        if (newSettings.START_VALUE >= newSettings.MAX_VALUE
+
+    const validation = ():boolean => {
+        return newSettings.START_VALUE >= newSettings.MAX_VALUE
             || newSettings.MAX_VALUE > 100
             || newSettings.START_VALUE < 0
             || newSettings.STEP < 1
             || newSettings.STEP > (newSettings.MAX_VALUE - newSettings.START_VALUE)
             || (newSettings.MAX_VALUE - newSettings.START_VALUE) % newSettings.STEP !== 0
-        ) {
-            dispatch(SetErrorAC())
+
+    }
+    useEffect(() => {
+        if (validation()) {
+            dispatch(setErrorAC())
         } else {
-            dispatch(ResetErrorAC())
+            dispatch(resetErrorAC())
         }
     }, [newSettings])
 
@@ -35,7 +39,7 @@ export const Settings: React.FC<SettingsPropsType> = memo((props) => {
     const onChangeSettings = (newSettings: SettingsType, title: SettingsTitleType) => {
         setNewSettings(newSettings)
         setSettingsTitle(title)
-        dispatch(ResetErrorAC())
+        dispatch(resetErrorAC())
     }
     const onChangeStartHandler = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         onChangeSettings({...newSettings, START_VALUE: +event.currentTarget.value}, 'set settings and click SAVE button')
@@ -48,8 +52,8 @@ export const Settings: React.FC<SettingsPropsType> = memo((props) => {
     }
     const onClickSaveHandler = () => {
         setSettingsTitle('')
-        dispatch(ResetErrorAC())
-        dispatch(SetSettingsAC(newSettings))
+        dispatch(resetErrorAC())
+        dispatch(setSettingsAC(newSettings))
     }
     const onClickCancelHandler = () => {
         onChangeSettings(counterSettings, '')
@@ -83,14 +87,14 @@ export const Settings: React.FC<SettingsPropsType> = memo((props) => {
                                % newSettings.STEP !== 0}/>
             </div>
             <div className={s.buttonContainer}>
-                <Button variant={"contained"}
+                <Button variant={'contained'}
                         disabled={error}
                         size={'small'}
                         color={'primary'}
                         onClick={onClickSaveHandler}>
                     SAVE
                 </Button>
-                <Button variant={"contained"}
+                <Button variant={'contained'}
                         size={'small'}
                         color={'primary'}
                         onClick={onClickCancelHandler}>

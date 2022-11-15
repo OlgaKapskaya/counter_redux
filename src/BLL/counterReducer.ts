@@ -10,11 +10,11 @@ const initState: CounterType = {
 
 type ActionType = AddCountAT | ResetCounterAT | SetSettingsAT | SetErrorAT | ResetErrorAT
 
-type AddCountAT = ReturnType<typeof AddCountAC>
-type ResetCounterAT = ReturnType<typeof ResetCountAC>
-type SetSettingsAT = ReturnType<typeof SetSettingsAC>
-type SetErrorAT = ReturnType<typeof SetErrorAC>
-type ResetErrorAT = ReturnType<typeof ResetErrorAC>
+type AddCountAT = ReturnType<typeof addCountAC>
+type ResetCounterAT = ReturnType<typeof resetCountAC>
+type SetSettingsAT = ReturnType<typeof setSettingsAC>
+type SetErrorAT = ReturnType<typeof setErrorAC>
+type ResetErrorAT = ReturnType<typeof resetErrorAC>
 
 export const counterReducer = (state = initState, action: ActionType): CounterType => {
     switch (action.type) {
@@ -42,18 +42,18 @@ export const counterReducer = (state = initState, action: ActionType): CounterTy
     }
 }
 
-export const AddCountAC = () => {
+export const addCountAC = () => {
     return {type: 'ADD_COUNT'} as const
 }
-export const ResetCountAC = () => {
+export const resetCountAC = () => {
     return {type: 'RESET_COUNT'} as const
 }
-export const SetSettingsAC = (settings: SettingsType) => {
+export const setSettingsAC = (settings: SettingsType) => {
     return {type: 'SET_SETTINGS', settings} as const
 }
-export const SetErrorAC = () => {
+export const setErrorAC = () => {
     return {type: 'SET_ERROR'} as const
 }
-export const ResetErrorAC = () => {
+export const resetErrorAC = () => {
     return {type: 'RESET_ERROR'} as const
 }
