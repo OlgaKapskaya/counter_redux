@@ -1,21 +1,18 @@
 import React, {useState} from "react";
 import s from './Counter.module.css'
 import {Display} from "./Display/Display";
-import {Button, Tooltip} from "@material-ui/core";
+import {Button} from "@material-ui/core";
 import {Settings} from "./Settings/Settings";
-import {CounterType, settingsTitleType, SettingsType} from "../BLL/types";
+import {CounterType, SettingsTitleType, SettingsType} from "../BLL/types";
+import {useDispatch, useSelector} from "react-redux";
+import {StateType} from "../BLL/reduxStore";
+import {AddCountAC, ResetCountAC} from "../BLL/counterReducer";
 
-type CounterPropsType = {
-    counter: CounterType
-    addCount: () => void
-    resetCount: () => void
-    setSettings: (settings: SettingsType) => void
-    setError: () => void
-    resetError: () => void
-}
+export const Counter = () => {
+    const [settingsTitle, setSettingsTitle] = useState<SettingsTitleType>('')
 
-export const Counter: React.FC<CounterPropsType> = (props) => {
-    const {counter, addCount, resetCount, setSettings, setError, resetError} = props
+    const counter = useSelector<StateType, CounterType>(state => state.counter)
+    const dispatch = useDispatch()
 
     const settings: SettingsType = {
         START_VALUE: counter.START_VALUE,
@@ -24,11 +21,13 @@ export const Counter: React.FC<CounterPropsType> = (props) => {
     }
     const addCountHandler = () => {
         if (counter.CURRENT_VALUE < counter.MAX_VALUE) {
-            addCount()
+            dispatch(AddCountAC())
         }
     }
+    const resetCountHandler = () => {
+        dispatch(ResetCountAC())
+    }
 
-    const [settingsTitle, setSettingsTitle] = useState<settingsTitleType>('')
 
     return (
         <div className={s.counterContainer}>
@@ -49,17 +48,13 @@ export const Counter: React.FC<CounterPropsType> = (props) => {
                             size={'small'}
                             color={'primary'}
                             disabled={counter.error || settingsTitle !== ""}
-                            onClick={resetCount}>
+                            onClick={resetCountHandler}>
                         RESET
                     </Button>
                 </div>
             </div>
-            <Settings counter={settings}
-                      error={counter.error}
-                      setError={setError}
-                      resetError={resetError}
-                      setSettingsTitle={setSettingsTitle}
-                      setSettings={setSettings}/>
+            <Settings counterSettings={settings}
+                      setSettingsTitle={setSettingsTitle}/>
         </div>
     )
 }

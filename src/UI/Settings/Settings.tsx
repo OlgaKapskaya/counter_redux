@@ -1,24 +1,22 @@
 import s from './Settings.module.css'
 import {Button, TextField} from "@material-ui/core";
 import React, {ChangeEvent, memo, useEffect, useState} from "react";
-import {settingsTitleType, SettingsType} from "../../BLL/types";
+import {SettingsTitleType, SettingsType} from "../../BLL/types";
+import {useDispatch, useSelector} from "react-redux";
+import {StateType} from "../../BLL/reduxStore";
+import {ResetErrorAC, SetErrorAC, SetSettingsAC} from "../../BLL/counterReducer";
 
 type SettingsPropsType = {
-    counter: SettingsType
-    error: boolean
-    setError: () => void
-    resetError: () => void
-    setSettingsTitle: (title: settingsTitleType) => void
-    setSettings: (settings: SettingsType) => void
+    counterSettings: SettingsType
+    setSettingsTitle: (title: SettingsTitleType) => void
 }
 export const Settings: React.FC<SettingsPropsType> = memo((props) => {
-    const {counter, setSettings, error, setError, resetError, setSettingsTitle} = props
+    const {counterSettings, setSettingsTitle} = props
 
-    const [newSettings, setNewSettings] = useState<SettingsType>({
-        START_VALUE: counter.START_VALUE,
-        MAX_VALUE: counter.MAX_VALUE,
-        STEP: counter.STEP
-    })
+    const error = useSelector<StateType, boolean>(state => state.counter.error)
+    const dispatch = useDispatch()
+
+    const [newSettings, setNewSettings] = useState<SettingsType>(counterSettings)
     useEffect(() => {
         if (newSettings.START_VALUE >= newSettings.MAX_VALUE
             || newSettings.MAX_VALUE > 100
@@ -27,39 +25,34 @@ export const Settings: React.FC<SettingsPropsType> = memo((props) => {
             || newSettings.STEP > (newSettings.MAX_VALUE - newSettings.START_VALUE)
             || (newSettings.MAX_VALUE - newSettings.START_VALUE) % newSettings.STEP !== 0
         ) {
-            setError()
+            dispatch(SetErrorAC())
         } else {
-            resetError()
+            dispatch(ResetErrorAC())
         }
     }, [newSettings])
 
-    const onChangeFunctionCreator = (newSettings: SettingsType) => {
+
+    const onChangeSettings = (newSettings: SettingsType, title: SettingsTitleType) => {
         setNewSettings(newSettings)
-        setSettingsTitle('set settings and click SAVE button')
-        setError()
+        setSettingsTitle(title)
+        dispatch(ResetErrorAC())
     }
     const onChangeStartHandler = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        onChangeFunctionCreator({...newSettings, START_VALUE: +event.currentTarget.value})
+        onChangeSettings({...newSettings, START_VALUE: +event.currentTarget.value}, 'set settings and click SAVE button')
     }
     const onChangeMaxHandler = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        onChangeFunctionCreator({...newSettings, MAX_VALUE: +event.currentTarget.value})
+        onChangeSettings({...newSettings, MAX_VALUE: +event.currentTarget.value},'set settings and click SAVE button')
     }
     const onChangeStepHandler = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        onChangeFunctionCreator({...newSettings, STEP: +event.currentTarget.value})
+        onChangeSettings({...newSettings, STEP: +event.currentTarget.value},'set settings and click SAVE button')
     }
     const onClickSaveHandler = () => {
-        setSettings(newSettings)
         setSettingsTitle('')
+        dispatch(ResetErrorAC())
+        dispatch(SetSettingsAC(newSettings))
     }
     const onClickCancelHandler = () => {
-        let cancelSettings: SettingsType = {
-            START_VALUE: counter.START_VALUE,
-            MAX_VALUE: counter.MAX_VALUE,
-            STEP: counter.STEP
-        }
-        setNewSettings(cancelSettings)
-        setSettingsTitle('')
-        resetError()
+        onChangeSettings(counterSettings, '')
     }
 
     return (

@@ -16,7 +16,7 @@ type SetSettingsAT = ReturnType<typeof SetSettingsAC>
 type SetErrorAT = ReturnType<typeof SetErrorAC>
 type ResetErrorAT = ReturnType<typeof ResetErrorAC>
 
-export const counterReducer = (state: CounterType = initState, action: ActionType): CounterType => {
+export const counterReducer = (state = initState, action: ActionType): CounterType => {
     switch (action.type) {
         case 'ADD_COUNT':
             return {

@@ -1,11 +1,11 @@
 import React from 'react';
 import './App.css';
-import {CounterContainer} from "./UI/CounterContainer";
+import {Counter} from "./UI/Counter";
 
 function App() {
   return (
     <div className="App">
-      <CounterContainer />
+      <Counter />
     </div>
   );
 }

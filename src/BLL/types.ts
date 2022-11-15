@@ -4,10 +4,11 @@ export type CounterType = {
     CURRENT_VALUE: number
     STEP: number
     error: boolean
+
 }
 export type SettingsType = {
     START_VALUE: number
     MAX_VALUE: number
     STEP: number
 }
-export type settingsTitleType = '' | 'set settings and click SAVE button'
+export type SettingsTitleType = '' | 'set settings and click SAVE button'
